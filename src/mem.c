@@ -42,7 +42,10 @@ DMF_Allocator *dmf_get_global_allocator() {
 
 __force_inline
 void dmf_set_global_allocator(DMF_Allocator *allocator) {
-    GLOBAL_ALLOCATOR = allocator;
+    if (allocator)
+        GLOBAL_ALLOCATOR = allocator;
+    else
+        GLOBAL_ALLOCATOR = &DEFAULT_ALLOCATOR;
 }
 
 __force_inline

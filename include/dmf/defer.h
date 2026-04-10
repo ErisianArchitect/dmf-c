@@ -1,24 +1,24 @@
-#ifndef DMF_LIBRARY_CORE
-#define DMF_LIBRARY_CORE
-#include <stddef.h>
-#include <stdarg.h>
-#include "dmf/syntax.h"         // IWYU pragma: export
-#include "dmf/type_aliases.h"   // IWYU pragma: export
+#ifndef DMF_LIBRARY_DEFER
+#define DMF_LIBRARY_DEFER
+#include "dmf/vec.h"
 
 // ────🮤MACROS🮥─────────────────────────────────────────────────
 
-#define STRINGIFY(token) #token
-#define SEMVER(major, minor, patch) STRINGIFY(major)"."STRINGIFY(minor)"."STRINGIFY(PATCH)
+
 
 // ────🮤TYPE DECLARATIONS🮥──────────────────────────────────────
 
+typedef bool (DMF_DeferCallback)(void *item, void *data);
+typedef struct DMF_DeferListSlot    DMF_DeferListSlot;
+typedef struct DMF_DeferList        DMF_DeferList;
+
 // ────🮤TYPE DEFINITIONS🮥───────────────────────────────────────
 
-// ────🮤FUNCTION DEFINITIONS🮥───────────────────────────────────
 
-void *first_nonnull(size_t argc, ...);
 
-void *first_nonnull_a(size_t argc, void **ptrs);
+// ────🮤FUNCTION DECLARATIONS🮥──────────────────────────────────
+
+
 
 // ────🮤DO NOT WRITE CODE PAST THIS POINT🮥──────────────────────
 #endif

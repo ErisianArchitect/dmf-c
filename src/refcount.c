@@ -3,6 +3,7 @@
 #include "dmf/refcount.h"
 
 #define make_incr_fn(width) \
+    __force_inline \
     uint##width##_t dmf_refcount##width##_incr(volatile dmf_refcount##width *count) { \
         return atomic_fetch_add(count, 1); \
     }
@@ -20,9 +21,9 @@ size_t dmf_refcount_incr(volatile dmf_refcount *count) {
 #define make_decr_fn(width) \
     uint##width##_t dmf_refcount##width##_decr(volatile dmf_refcount##width *count) { \
         uint##width##_t cur_count = atomic_load_explicit(count, memory_order_relaxed); \
-        if (cur_count == 0) \
-            return cur_count; \
         loop { \
+            if (cur_count == 0) \
+                return cur_count; \
             size_t new_count = cur_count - 1; \
             if (atomic_compare_exchange_strong(count, &cur_count, new_count)) \
                 return new_count; \
@@ -36,9 +37,9 @@ make_decr_fn(64);
 
 size_t dmf_refcount_decr(volatile dmf_refcount *count) {
     size_t cur_count = atomic_load_explicit(count, memory_order_relaxed);
-    if (cur_count == 0)
-        return cur_count;
     loop {
+        if (cur_count == 0)
+            return cur_count;
         size_t new_count = cur_count - 1;
         if (atomic_compare_exchange_strong(count, &cur_count, new_count))
             return new_count;

@@ -17,11 +17,11 @@ typedef atomic uint32_t    dmf_refcount32;
 typedef atomic uint64_t    dmf_refcount64;
 typedef atomic size_t      dmf_refcount;
 
-// ───── TYPE DECLARATIONS ─────────────────────────────────────
+// ────🮤TYPE DECLARATIONS🮥──────────────────────────────────────
 
-// ───── TYPE DEFINITIONS ──────────────────────────────────────
+// ────🮤TYPE DEFINITIONS🮥───────────────────────────────────────
 
-// ───── FUNCTION DECLARATIONS ─────────────────────────────────
+// ────🮤FUNCTION DECLARATIONS🮥──────────────────────────────────
 
 uint8_t     dmf_refcount8_incr  (volatile   dmf_refcount8   *count);
 uint16_t    dmf_refcount16_incr (volatile   dmf_refcount16  *count);

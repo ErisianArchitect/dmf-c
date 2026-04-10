@@ -12,6 +12,8 @@ static VecStrat CSTR_STRAT = (VecStrat){
 };
 
 int main() {
+    #define break_forever goto forever_out
+    #define forever(code) for(;;) { code } __unused forever_out:
 
     void *cleanup_return = &&return_success;
 

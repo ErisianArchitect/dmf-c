@@ -5,16 +5,20 @@ builddir 		= build
 releasedir		= $(builddir)/release
 debugdir 		= $(builddir)/debug
 artifactsdir	= $(builddir)/artifacts
+releaseexedir	= bin
 includedirs		= include
 srcdir			= src
 testsdir		= tests
-ALLDIRS			= \
-	$(builddir) \
-	$(releasedir) \
-	$(debugdir) \
+exesdir			= exes
+ALLDIRS			= 	\
+	$(builddir) 	\
+	$(releasedir) 	\
+	$(debugdir) 	\
 	$(artifactsdir) \
-	$(includedirs) \
-	$(srcdir)
+	$(releaseexedir)\
+	$(includedirs) 	\
+	$(srcdir) 		\
+	$(exesdir)
 
 CC				= clang
 MMDFLAGS		= -MMD -MP
@@ -24,13 +28,15 @@ DEBUGFLAGS		= $(CFLAGS) -DDMF_BUILD -DDEBUG -g -O0 -fno-omit-frame-pointer -fsan
 RELEASEFLAGS	= $(CFLAGS) -DDMF_BUILD -O3 $(MMDFLAGS)
 TESTFLAGS		= $(CFLAGS) -DDMF_BUILD -DDMF_TEST -DDEBUG -g -O0 -fno-omit-frame-pointer -fsanitize=address,undefined -Wall -Wextra
 
-HEADERS			= $(wildcard include/*.h)
+HEADERS			= $(wildcard include/*.h) $(wildcard include/dmf/*.h)
 
 LIB 			= $(builddir)/$(name).a
 SRC				= $(wildcard $(srcdir)/*.c)
 OBJ				= $(patsubst $(srcdir)/%.c, $(builddir)/%.o, $(SRC))
 TESTS			= $(wildcard $(testsdir)/*.c)
 TESTEXES		= $(patsubst $(testsdir)/%.c, $(artifactsdir)/%, $(TESTS))
+CEXES			= $(wildcard $(exesdir)/*.c)
+EXES			= $(patsubst $(exesdir)/%.c, $(releaseexedir)/%, $(CEXES))
 
 RELEASE_LIB 	= $(releasedir)/$(name).a
 DEBUG_LIB		= $(debugdir)/$(name).a
@@ -57,19 +63,22 @@ ensuredirs:
 	@mkdir -p $(ALLDIRS)
 
 $(releasedir)/%.o: $(srcdir)/%.c $(HEADERS) | $(releasedir)
-	@$(CC) $(RELEASEFLAGS) -c $< -o $@ && success "Release Build \"$@\" Succeeded." || failure "Build Failed! \"$@\""
+	@$(CC) $(RELEASEFLAGS) -c $< -o $@ || failure "Build Failed! \"$@\""
 
 $(RELEASE_LIB): $(RELEASE_OBJ)
 	@ar rcs $@ $^
 
 $(debugdir)/%.o: $(srcdir)/%.c $(HEADERS) | $(debugdir)
-	@$(CC) $(DEBUGFLAGS) -c $< -o $@ && success "Debug Build Succeeded \"$@\"." || failure "Build Failed! \"$@\""
+	@$(CC) $(DEBUGFLAGS) -c $< -o $@ || failure "Build Failed! \"$@\""
 
 $(DEBUG_LIB): $(DEBUG_OBJ)
 	@ar rcs $@ $^
 
 $(artifactsdir)/%: $(testsdir)/%.c $(SRC) $(HEADERS) $(DEBUG_LIB) $(DEBUG_OBJ) | $(testsdir)
 	@$(CC) $(TESTFLAGS) $< $(DEBUG_LIB) -o $@
+
+$(releaseexedir)/%: $(exesdir)/%.c $(SRC) $(HEADERS) $(RELEASE_LIB) $(RELEASE_OBJ) | $(exesdir)
+	@$(CC) $(RELEASEFLAGS) $< $(RELEASE_LIB) -o $@ || failure "Build failed for executables."
 
 release: ensuredirs $(RELEASE_LIB)
 
@@ -80,6 +89,8 @@ check:
 
 test: ensuredirs $(TESTEXES)
 	@for t in $(TESTEXES); do $$t; done
+
+bin: ensuredirs $(EXES)
 
 clean:
 	@rm -rf build/* && success "The project has been cleansed and blessed by a high priestess." || failure "Dunno what happened. (clean)"

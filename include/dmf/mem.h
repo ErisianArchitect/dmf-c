@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-// ───── TYPE DECLARATIONS ─────────────────────────────────────
+// ────🮤TYPE DECLARATIONS🮥──────────────────────────────────────
 
 typedef struct DMF_Allocator DMF_Allocator;
 typedef void *(DMF_Malloc)(DMF_Allocator *allocator, size_t size);
@@ -19,7 +19,7 @@ struct DMF_Allocator {
     DMF_Free *free;
 };
 
-// ───── FUNCTION DECLARATIONS ─────────────────────────────────
+// ────🮤FUNCTION DECLARATIONS🮥──────────────────────────────────
 
 DMF_Allocator  *dmf_get_global_allocator();
 void            dmf_set_global_allocator(DMF_Allocator *allocator);
@@ -41,4 +41,5 @@ void           *dmf_calloc(size_t elem_count, size_t elem_size);
 void            dmf_free_in(DMF_Allocator *allocator, void *mem);
 void            dmf_free(void *mem);
 
+// ────🮤DO NOT WRITE CODE PAST THIS POINT🮥──────────────────────
 #endif
