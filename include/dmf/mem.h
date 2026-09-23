@@ -8,15 +8,19 @@
 typedef struct DMF_Allocator DMF_Allocator;
 typedef void *(DMF_Malloc)(DMF_Allocator *allocator, size_t size);
 typedef void *(DMF_Realloc)(DMF_Allocator *allocator, void *mem, size_t new_size);
-typedef void *(DMF_Calloc)(DMF_Allocator * allocator, size_t elem_count, size_t elem_size);
-typedef void (DMF_Free)(DMF_Allocator *allocator, void *mem);
+typedef void *(DMF_Calloc)(DMF_Allocator *allocator, size_t elem_count, size_t elem_size);
+typedef void *(DMF_AlignedAlloc)(DMF_Allocator *allocator, size_t alignment, size_t size);
+typedef void  (DMF_Free)(DMF_Allocator *allocator, void *mem);
+typedef void  (DMF_AlignedFree)(DMF_Allocator *allocator, void *mem);
 
 struct DMF_Allocator {
-    void *data;
-    DMF_Malloc *malloc;
-    DMF_Realloc *realloc;
-    DMF_Calloc *calloc;
-    DMF_Free *free;
+    void               *data;
+    DMF_Malloc         *malloc;
+    DMF_Realloc        *realloc;
+    DMF_Calloc         *calloc;
+    DMF_AlignedAlloc   *aligned_alloc;
+    DMF_Free           *free;
+    DMF_AlignedFree    *aligned_free;
 };
 
 // ────🮤FUNCTION DECLARATIONS🮥──────────────────────────────────
@@ -38,8 +42,12 @@ void           *dmf_realloc_in(DMF_Allocator *allocator, void *mem, size_t new_s
 void           *dmf_realloc(void *mem, size_t new_size);
 void           *dmf_calloc_in(DMF_Allocator *allocator, size_t elem_count, size_t elem_size);
 void           *dmf_calloc(size_t elem_count, size_t elem_size);
+void           *dmf_aligned_alloc_in(DMF_Allocator *allocator, size_t alignment, size_t size);
+void           *dmf_aligned_alloc(size_t alignment, size_t size);
 void            dmf_free_in(DMF_Allocator *allocator, void *mem);
 void            dmf_free(void *mem);
+void            dmf_aligned_free_in(DMF_Allocator *allocator, void *mem);
+void            dmf_aligned_free(void *mem);
 
 // ────🮤DO NOT WRITE CODE PAST THIS POINT🮥──────────────────────
 #endif

@@ -5,16 +5,16 @@
 #include "dmf/syntax.h"         // IWYU pragma: export
 #include "dmf/type_aliases.h"   // IWYU pragma: export
 
-// ────🮤MACROS🮥─────────────────────────────────────────────────
+// ───🮤 MACROS 🮥────────────────────────────────────────────────
 
 #define STRINGIFY(token) #token
 #define SEMVER(major, minor, patch) STRINGIFY(major)"."STRINGIFY(minor)"."STRINGIFY(PATCH)
 
-// ────🮤TYPE DECLARATIONS🮥──────────────────────────────────────
+// ───🮤 TYPE DECLARATIONS 🮥─────────────────────────────────────
 
-// ────🮤TYPE DEFINITIONS🮥───────────────────────────────────────
+// ───🮤 TYPE DEFINITIONS 🮥──────────────────────────────────────
 
-// ────🮤FUNCTION DEFINITIONS🮥───────────────────────────────────
+// ───🮤 FUNCTION DECLARATIONS 🮥─────────────────────────────────
 
 void *first_nonnull(size_t argc, ...);
 

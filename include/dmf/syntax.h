@@ -3,7 +3,6 @@
 
 
 // ───── ATTRIBUTES ────────────────────────────────────────────
-
 #define __attr(attrib) __attribute__((attrib))
 
 #define __inline                inline
